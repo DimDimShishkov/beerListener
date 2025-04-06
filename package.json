@@ -1,0 +1,19 @@
+{
+  "name": "beeejs_listener",
+  "version": "1.0.0",
+  "description": "помогатор организации сборов в бары по четвергам",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "script": "node --env-file=.env script.js",
+    "scriptV2": "node --env-file=.env scripV2.js"
+  },
+  "author": "dimdimshishkov",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "express": "^5.1.0",
+    "node-telegram-bot-api": "^0.66.0",
+    "puppeteer": "^24.6.0"
+  }
+}
