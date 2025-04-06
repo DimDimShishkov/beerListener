@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "script": "node --env-file=.env script.js",
-    "scriptV2": "node --env-file=.env scripV2.js"
+    "script": "node --env-file=.env script.js"
   },
   "author": "dimdimshishkov",
   "license": "ISC",
@@ -17,3 +16,4 @@
     "puppeteer": "^24.6.0"
   }
 }
+
