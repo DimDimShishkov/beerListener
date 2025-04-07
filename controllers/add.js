@@ -1,47 +1,64 @@
 const puppeteer = require("puppeteer");
 
+//TODO заменить на обращение к БД
+const fs = require("fs");
+const path = require("path");
+
 // получаем название бара из URL
 async function getTitleByUrl(url) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   try {
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 3000 });
+    await page.goto(url, {waitUntil: "networkidle0", timeout: 3000});
   } catch (e) {}
 
   await page.content();
 
-  const title = await page.evaluate(() =>
-    document.title.replace(", Москва — Яндекс Карты", "")
-  );
+  const title = await page.evaluate(() => document.title);
 
   await browser.close();
-  return title || "не вышло";
+  //TODO как будет время посмотреть почему replace без String(title) не работает
+  return title ? String(title).replace(", Москва — Яндекс Карты", "") : "не вышло";
+}
+
+//TODO заменить на обращение к БД
+function addBarToDB(name, url) {
+  const database = path.resolve(__dirname, "./database.json");
+  const databaseJson = JSON.parse(fs.readFileSync(database, "utf8"));
+
+  const bars = [...databaseJson.bars, {name, url}];
+
+  fs.writeFileSync(database, JSON.stringify({bars, users: databaseJson.users}));
 }
 
 module.exports.addBar = async (msgTxt) => {
-  console.log(msgTxt);
+  //обработка сообщения для разработки
+  if (msgTxt.match(/#место_dev/gi)) {
+    const [tag, name, url, ...rest] = String(msgTxt).split(" ");
+    addBarToDB(name, url);
+    return {err: false, name, url};
+  }
 
-  // сперва разбиваем на строчки
-  // затем каждую строчку проверяем на наличие ссылки на гугл карты
-  // затем эту строчку чистим от остального текста
-  const url = msg.text
-    .split("\n")
-    .map((str) =>
-      str.includes("https://")
-        ? str.split(" ").find((el) => el.startsWith("https://"))
-        : ""
-    )
-    .find((str) => str.startsWith("https://"));
+  // регулярка "https://"
+  const regex = /https:\/\/[^\s]+/;
+  const urls = msgTxt.match(regex);
 
-  //TODO здесь вернуть сообщение в чат
-  if (!url)
-    return console.log(
-      "в сообщении нет ссылки. либо добавьте ссылку либо добавьте место через dev",
-      msg.text
-    );
+  //TODO заменить console.log на возвращение сообщения в чат"
 
-  const name = await getFileUrl(url);
-  messages.push({ name, url });
-  return console.log({ name, url });
+  if (!urls)
+    return {
+      err: true,
+      name: "произошла ошибка, добавьте место через dev",
+      url: "",
+    };
+
+  const name = await getTitleByUrl(urls[0]);
+
+  if (name) {
+    addBarToDB(name, urls[0]);
+  }
+
+  return {err: false, name, url: urls[0]};
 };
+
