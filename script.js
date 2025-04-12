@@ -3,7 +3,7 @@ const express = require("express");
 const http = require("http");
 const {addBar} = require("./controllers/add");
 const {generatePoll} = require("./controllers/pool");
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 
 dotenv.config();
 
