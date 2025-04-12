@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 
 //TODO заменить на обращение к БД
 const fs = require("fs");
