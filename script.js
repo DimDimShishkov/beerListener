@@ -3,6 +3,9 @@ const express = require("express");
 const http = require("http");
 const {addBar} = require("./controllers/add");
 const {generatePoll} = require("./controllers/pool");
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Создаем бота
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
