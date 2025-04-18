@@ -4,7 +4,6 @@
   "description": "помогатор организации сборов в бары по четвергам",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "script": "node script.js"
   },
   "author": "dimdimshishkov",
@@ -13,7 +12,8 @@
     "axios": "^1.8.4",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "node-telegram-bot-api": "^0.66.0",
-    "puppeteer-core": "^24.6.1"
+    "node-telegram-bot-api": "^0.63.0",
+    "puppeteer-core": "^24.6.1",
+    "selenium-webdriver": "^4.31.0"
   }
 }
