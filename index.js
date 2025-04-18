@@ -22,6 +22,9 @@ bot.on("message", async (msg) => {
     );
   } else if (msg.text.match(/#опрос/gi)) {
     const bars = await generatePoll(msg.text);
+    if (bars.length === 0) {
+      return bot.sendMessage(chatId, "добавьте хотя бы 2 места");
+    }
     return bot.sendPoll(chatId, "куда пойдём?", bars, {
       allows_multiple_answers: true,
       is_anonymous: false,
