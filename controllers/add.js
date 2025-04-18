@@ -1,5 +1,4 @@
-const {Builder} = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
+const puppeteer = require("puppeteer-core");
 
 //TODO заменить на обращение к БД
 const fs = require("fs");
@@ -7,26 +6,28 @@ const path = require("path");
 
 // получаем название бара из URL
 async function getTitleByUrl(url) {
-  // set the browser options
-  const options = new chrome.Options().addArguments("--headless");
-
-  // initialize the webdriver
-  const driver = new Builder().forBrowser("chrome").setChromeOptions(options).build();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-gpu"],
+  });
+  const page = await browser.newPage();
 
   try {
-    // navigate to the target webpage
-    await driver.get(url);
+    await page.goto(url, {waitUntil: "networkidle0", timeout: 3000});
+  } catch (e) {}
 
-    // extract HTML of the target webpage
-    const title = await driver.getTitle();
-    console.log(title);
-  } catch (error) {
-    // handle error
-    console.error("An error occurred:", error);
-  } finally {
-    // quit browser session
-    await driver.quit();
-  }
+  await page.content();
+
+  const title = await page.evaluate(() => document.title);
+
+  await page.close();
+  await browser.close();
+
+  console.log(title);
+
+  //TODO как будет время посмотреть почему replace без String(title) не работает
+  return "";
+  // return title ? String(title).replace(", Москва — Яндекс Карты", "") : "не вышло";
 }
 
 //TODO заменить на обращение к БД
