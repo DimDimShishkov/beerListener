@@ -47,7 +47,7 @@ async function addBar(msgTxt) {
 
   const name = await getTitleByUrl(urls[0]);
   if (name) {
-    editBarDB(name, url, true);
+    editBarDB(name, urls[0], true);
   }
   return { err: false, name, url: urls[0] };
 }
