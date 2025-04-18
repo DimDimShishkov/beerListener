@@ -7,6 +7,14 @@ dotenv.config();
 // Создаем бота
 const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 
+bot.on("message", async (msg) => {
+  // если со стикером, картинкой итд
+  if (!msg.text) return;
+  console.log(message);
+});
+
+bot.on("polling_error", (msg) => console.log(msg));
+
 screenshot("https://example.com").then(() => console.log("screenshot saved"));
 
 async function screenshot(url) {
@@ -21,7 +29,7 @@ async function screenshot(url) {
     timeout: 0,
     waitUntil: "networkidle0",
   });
-  const title = page.evaluate(() => document.title);
+  const title = await page.evaluate(() => document.title);
 
   if (title) {
     console.log(title);
