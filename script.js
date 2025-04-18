@@ -1,6 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
-const express = require("express");
-const http = require("http");
+// const express = require("express");
+// const http = require("http");
 const { addBar } = require("./controllers/add");
 const { generatePoll } = require("./controllers/pool");
 const dotenv = require("dotenv");
@@ -10,12 +10,12 @@ dotenv.config();
 // Создаем бота
 const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 
-// Создаем сервер с Express
-const app = express();
-const server = http.createServer(app);
+// // Создаем сервер с Express
+// const app = express();
+// const server = http.createServer(app);
 
-// Статическая папка для работы с файлами (например, CSS, изображения)
-app.use(express.static("public"));
+// // Статическая папка для работы с файлами (например, CSS, изображения)
+// app.use(express.static("public"));
 
 // Обработчик получения сообщений из Telegram
 bot.on("message", async (msg) => {
@@ -42,7 +42,7 @@ bot.on("message", async (msg) => {
 
 bot.on("polling_error", (msg) => console.log(msg));
 
-// Запуск сервера на порту 3000
-server.listen(3001, () => {
-  console.log("Server started on http://localhost:3001");
-});
+// // Запуск сервера на порту 3000
+// server.listen(3001, () => {
+//   console.log("Server started on http://localhost:3001");
+// });

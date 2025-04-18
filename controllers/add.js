@@ -4,7 +4,6 @@ const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 
-// получаем название бара из URL
 async function getTitleByUrl(url) {
   const browser = await puppeteer.launch({
     headless: true,
@@ -12,8 +11,24 @@ async function getTitleByUrl(url) {
   });
 
   const page = await browser.newPage();
+  await page.setViewport({ width: 1920, height: 1080 });
   await page.goto(url, { timeout: 0, waitUntil: "networkidle0" });
-  await page.content();
+  const screenData = await page.evaluate(() => document.title);
+
+  if (!!screenData) {
+    fs.writeFileSync("screenshots/screenshot.jpg", screenData);
+  } else {
+    throw Error("Unable to take screenshot");
+  }
+
+  await page.close();
+  await browser.close();
+}
+
+// получаем название бара из URL
+async function getTitleByUrl(url) {
+  await page.goto(url, { timeout: 0, waitUntil: "networkidle0" });
+  // await page.content();
 
   const title = await page.evaluate(() => document.title);
 
@@ -42,7 +57,7 @@ function addBarToDB(name, url) {
   );
 }
 
-module.exports.addBar = async (msgTxt) => {
+async function addBar(msgTxt) {
   //обработка сообщения для разработки
   if (msgTxt.match(/#место_dev/gi)) {
     const [tag, name, url, ...rest] = String(msgTxt).split(" ");
@@ -70,4 +85,6 @@ module.exports.addBar = async (msgTxt) => {
   // }
 
   return { err: false, name, url: urls[0] };
-};
+}
+
+export { addBar };
