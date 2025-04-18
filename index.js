@@ -1,5 +1,11 @@
 const puppeteer = require("puppeteer-core");
-const fs = require("fs");
+// const fs = require("fs");
+const TelegramBot = require("node-telegram-bot-api");
+const dotenv = require("dotenv");
+dotenv.config();
+
+// Создаем бота
+const bot = new TelegramBot(process.env.TOKEN, { polling: true });
 
 screenshot("https://example.com").then(() => console.log("screenshot saved"));
 
@@ -15,16 +21,8 @@ async function screenshot(url) {
     timeout: 0,
     waitUntil: "networkidle0",
   });
-  const screenData = await page.screenshot({
-    encoding: "binary",
-    type: "jpeg",
-    quality: 100,
-  });
-  if (!!screenData) {
-    fs.writeFileSync("screenshots/screenshot.jpg", screenData);
-  } else {
-    throw Error("Unable to take screenshot");
-  }
+  const title = await page.getTitle();
+  console.log(title);
 
   await page.close();
   await browser.close();
