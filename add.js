@@ -1,5 +1,9 @@
 const puppeteer = require("puppeteer-core");
 
+//TODO заменить на обращение к БД
+const fs = require("fs");
+const path = require("path");
+
 async function getTitleByUrl(url) {
   const browser = await puppeteer.launch({
     headless: true,
@@ -25,13 +29,26 @@ async function getTitleByUrl(url) {
     : "не вышло";
 }
 
+//TODO заменить на обращение к БД
+function addBarToDB(name, url) {
+  const database = path.resolve(__dirname, "./database.json");
+  const databaseJson = JSON.parse(fs.readFileSync(database, "utf8"));
+
+  const bars = [...databaseJson.bars, { name, url }];
+
+  fs.writeFileSync(
+    database,
+    JSON.stringify({ bars, users: databaseJson.users })
+  );
+}
+
 async function addBar(msgTxt) {
   //обработка сообщения для разработки
-  // if (msgTxt.match(/#место_dev/gi)) {
-  //   const [tag, name, url, ...rest] = String(msgTxt).split(" ");
-  //   addBarToDB(name, url);
-  //   return { err: false, name, url };
-  // }
+  if (msgTxt.match(/#место_dev/gi)) {
+    const [tag, name, url, ...rest] = String(msgTxt).split(" ");
+    addBarToDB(name, url);
+    return { err: false, name, url };
+  }
 
   // регулярка "https://"
   const regex = /https:\/\/[^\s]+/;

@@ -1,6 +1,7 @@
 const TelegramBot = require("node-telegram-bot-api");
 const dotenv = require("dotenv");
 const addBar = require("./add");
+const generatePoll = require("./poll");
 dotenv.config();
 
 // Создаем бота
