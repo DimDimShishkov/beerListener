@@ -10,12 +10,9 @@ async function getTitleByUrl(url) {
     headless: true,
     args: ["--no-sandbox", "--disable-gpu"],
   });
+
   const page = await browser.newPage();
-
-  try {
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 3000 });
-  } catch (e) {}
-
+  await page.goto(url, { timeout: 0, waitUntil: "networkidle0" });
   await page.content();
 
   const title = await page.evaluate(() => document.title);
@@ -26,8 +23,10 @@ async function getTitleByUrl(url) {
   console.log(title);
 
   //TODO как будет время посмотреть почему replace без String(title) не работает
-  return "";
-  // return title ? String(title).replace(", Москва — Яндекс Карты", "") : "не вышло";
+  // return "";
+  return title
+    ? String(title).replace(", Москва — Яндекс Карты", "")
+    : "не вышло";
 }
 
 //TODO заменить на обращение к БД
