@@ -1,8 +1,4 @@
 const puppeteer = require("puppeteer-core");
-// const fs = require("fs");
-const TelegramBot = require("node-telegram-bot-api");
-const dotenv = require("dotenv");
-dotenv.config();
 
 async function getTitleByUrl(url) {
   const browser = await puppeteer.launch({
@@ -52,4 +48,4 @@ async function addBar(msgTxt) {
   return { err: false, name, url: urls[0] };
 }
 
-module.exports.addBar = addBar;
+module.exports = addBar;
