@@ -22,7 +22,12 @@ async function screenshot(url) {
     waitUntil: "networkidle0",
   });
   const title = page.evaluate(() => document.title);
-  console.log(title);
+
+  if (title) {
+    console.log(title);
+  } else {
+    throw Error("Unable to take screenshot");
+  }
 
   await page.close();
   await browser.close();
