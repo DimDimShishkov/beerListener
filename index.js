@@ -21,7 +21,7 @@ async function screenshot(url) {
     timeout: 0,
     waitUntil: "networkidle0",
   });
-  const title = await page.getTitle();
+  const title = page.evaluate(() => document.title);
   console.log(title);
 
   await page.close();
